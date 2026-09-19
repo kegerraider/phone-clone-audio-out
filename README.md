@@ -13,6 +13,7 @@ Running Android apps on a TV or secondary display often requires manual ADB setu
 3. **Generates Launcher Script**: Creates `launch_darts.cmd` preconfigured with playback audio routing and fullscreen flags.
 4. **Creates Desktop Shortcut**: Drops a `DARTS` shortcut directly onto your Windows Desktop with the custom `GranPi` icon.
 5. **Auto-Launches**: Immediately starts mirroring your device.
+6. **Smart Execution**: Validates existing installations before running—if everything is already set up, it launches immediately without re-downloading or overwriting files.
 
 ---
 
