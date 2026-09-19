@@ -2,6 +2,8 @@
 $scrcpyDir = "C:\scrcpy"
 $scrcpyExe = Join-Path $scrcpyDir "scrcpy.exe"
 $launcherBat = Join-Path $scrcpyDir "launch_darts.cmd"
+$iconPath = Join-Path $scrcpyDir "GranPi.ico"
+$iconUrl = "https://raw.githubusercontent.com/kegerraider/phone-clone-audio-out/main/GranPi.ico"
 $desktopPath = [Environment]::GetFolderPath("Desktop")
 $shortcutPath = Join-Path $desktopPath "DARTS.lnk"
 
@@ -54,7 +56,18 @@ if (-not (Test-Path $scrcpyExe)) {
     Write-Host "scrcpy already present at $scrcpyExe." -ForegroundColor Green
 }
 
-# 2. Write the .cmd launcher file inside C:\scrcpy
+# 2. Download the custom GranPi.ico if missing
+if (-not (Test-Path $iconPath)) {
+    try {
+        Write-Host "Downloading GranPi icon..." -ForegroundColor Cyan
+        Invoke-WebRequest -Uri $iconUrl -OutFile $iconPath
+        Write-Host "Icon saved to $iconPath." -ForegroundColor Green
+    } catch {
+        Write-Warning "Failed to download custom icon. Falling back to default executable icon."
+    }
+}
+
+# 3. Write the .cmd launcher file inside C:\scrcpy
 $cmdContent = @"
 @echo off
 cd /d "$scrcpyDir"
@@ -64,19 +77,23 @@ scrcpy.exe --audio-source=playback --stay-awake -f
 Set-Content -Path $launcherBat -Value $cmdContent -Encoding ASCII
 Write-Host "Launcher script created at $launcherBat." -ForegroundColor Green
 
-# 3. Create desktop shortcut named DARTS pointing to the .cmd launcher
+# 4. Create desktop shortcut named DARTS
 $wscriptShell = New-Object -ComObject WScript.Shell
 $shortcut = $wscriptShell.CreateShortcut($shortcutPath)
 $shortcut.TargetPath = $launcherBat
 $shortcut.WorkingDirectory = $scrcpyDir
 $shortcut.Description = "Launch DARTS Phone Mirror"
-# Use scrcpy's native icon if available
-if (Test-Path $scrcpyExe) {
+
+# Use downloaded GranPi icon if present, otherwise fallback to scrcpy's native icon
+if (Test-Path $iconPath) {
+    $shortcut.IconLocation = "$iconPath,0"
+} elseif (Test-Path $scrcpyExe) {
     $shortcut.IconLocation = "$scrcpyExe,0"
 }
+
 $shortcut.Save()
 Write-Host "Shortcut created on Desktop: $shortcutPath" -ForegroundColor Green
 
-# 4. Launch scrcpy immediately
+# 5. Launch scrcpy immediately
 Write-Host "Launching scrcpy..." -ForegroundColor Cyan
 Start-Process -FilePath $launcherBat
