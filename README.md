@@ -43,13 +43,34 @@ Because `--audio-source=playback` specifically targets Android media streams, yo
 
 ---
 
-## Prerequisites
+### Prerequisites Setup Guide
 
-1. **Windows 10 / 11** (64-bit).
-2. **Android Phone**:
-* **Developer Options** enabled.
-* **USB Debugging** enabled.
-* Device connected via USB (ensure you tap **Always Allow** when prompted on your phone screen).
+#### 1. Verify Windows 10 / 11 (64-bit)
+1. Press `Win + I` on your keyboard to open Windows Settings.
+2. Navigate to **System** > **About**.
+3. Look under the **Device specifications** section. 
+4. Confirm that **System type** says "64-bit operating system".
+
+#### 2. Enable Developer Options (Android)
+1. Open the **Settings** app on your Android phone.
+2. Scroll down and tap **About phone** (on some devices, you may then need to tap **Software information**).
+3. Find the **Build number** entry.
+4. Tap **Build number** 7 times in rapid succession. 
+5. Enter your PIN or pattern if prompted. You will see a toast message saying, "You are now a developer!"
+
+#### 3. Enable USB Debugging (Android)
+1. Go back to the main **Settings** menu.
+2. Navigate to **System** > **Developer options**. *(Note: On some phones like Samsung, Developer options is at the very bottom of the main settings list).*
+3. Scroll down to the **Debugging** section.
+4. Toggle on **USB debugging**.
+5. Tap **OK** on the warning prompt to confirm.
+
+#### 4. Connect and Authorize
+1. Connect your Android phone to your PC using a high-quality data USB cable.
+2. Unlock your phone screen.
+3. A prompt will appear on your phone asking to **Allow USB debugging?** (If it doesn't appear immediately, try opening a command prompt on your PC and running `adb devices`).
+4. Check the box for **Always allow from this computer**.
+5. Tap **Allow**.
 
 
 
